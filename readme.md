@@ -16,7 +16,7 @@
         }
     ]
 }
-
+```
 ## Route 53 (DNS)
 1. After creating a hosted zone for your domain, records inform the DNS how you want traffic to be routed for that domain.
 2. Records can do the following:
