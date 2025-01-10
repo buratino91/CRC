@@ -4,7 +4,7 @@ import json
 
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('ViewerCounter')
+table = dynamodb.Table('ViewCount')
 
 def lambda_handler(event, context):
     try:
@@ -13,7 +13,7 @@ def lambda_handler(event, context):
 
         response = table.update_item(
             Key={
-                'id': 'page_views',
+                'Count': new_value,
             },
             UpdateExpression='SET #count = :val',
             #Tells Dynamodb how to update the item. Set is the commmand to update or add attributes
@@ -21,7 +21,7 @@ def lambda_handler(event, context):
             ExpressionAttributeNames={ #'#count' is a placeholder for the attribute name 'count'. We use "#"" because "count" is a 
             #reserved word in Dynamodb. The ExpressionAttributeNames map the key (the name that you want to use) and the value
             # is the attribute name you want to expand to
-                '#count': 'count',
+                '#V': 'Value',
             },
             ExpressionAttributeValues={
                 ':val': new_value, #expression attribute values must always start with a colon and must always specify the type 
