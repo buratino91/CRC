@@ -1,43 +1,11 @@
-# Notes 
-1. The `PutObject` api defaults to binary/octet stream if you do not specify the content type. To do this, use `--content-type ""`.
-2. `aws s3 cp` might be the better option as the command automatically tries to detect and set the correct content type.
-3. Rename your main html file to `index.html` for the website to dafault to it.
-4. Static website hosting must be enabled in bucket properties to host a website
-5. Ensure bucket has the right permissions (including ACL) and policy (json file) to allow public read access.
-```{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "PublicReadGetObject",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::your-bucket-name/*"
-        }
-    ]
-}
-```
-## Route 53 (DNS)
-1. After creating a hosted zone for your domain, records inform the DNS how you want traffic to be routed for that domain.
-2. Records can do the following:
-    - Route internet traffic for example.com to the IP address of a host in your data center
-    - Route email for that domain (ichiro@example.com) to a mail server (mail.example.com)
-3. The name of each record in the hosted zone must end with the name of the hosted zone.
+# CRC
+My attempt at the cloud resume challenge
+## Chunk 1 - Building the front end
+1. Static website hosted on a S3 bucket
+2. Cloudfront CDN integrated with S3 for HTTPS
+3. Route 53 for DNS for custom domain name
 
-## To enable custom domain name with HTTPS:
-1. Obtain a SSL/TLS cert using ACM or any third-party certificate manager.
-2. Attach the cert to your cloudfront distribution
-3. Update DNS settings
-    •	Create a CNAME record pointing your custom domain (e.g., www.example.com) to the CloudFront domain name (e.g., dxxxxxxxxxxxxx.cloudfront.net).
-	•	Alternatively, use an Alias record (preferred for Route 53) pointing to the CloudFront distribution.
-4. Configure viewer policy
-    - In cloudfront, set viewer policy to 
-        1. redirect HTTP to HTTPS or,
-        2. HTTPS only
-Note: An alias record maps your domain to specific AWS resources without needing to know their IP addresses. If you
-use s3 bucket to host a website, you need to create an alias record
-
-## Reflection
+### Reflection
 What aspect of Chunk 1's work did you find the most difficult?
 - Configuring Route 53 to point to my cloudfront distribution.
 - Understanding DNS configuration and records (including alias records)
@@ -48,3 +16,26 @@ To resolve this: Enter default root object as `index.html` in cloudfront distrib
 
 What i did to convert the resources into IaC:
 Protect DNS setup from MitM (DNSSEC):
+
+## Chunk 2 - Building the backend
+1. Dynamodb table to store the view count
+2. Lambda functions to update the count and retrieve the count
+3. Two HTTP APIs created using API gateway to accept requests from the webpage and communicate with the database.
+
+### Reflection
+**What aspect of Chunk 2's work did you find the most difficult?**
+1. Writing the lambda function to update an item into my dynamodb table
+2. Learning how to use the update_item API for dynamodb.
+    a. Understanding the syntax for UpdateExpression’, ‘ExpressionAttributeNames’ and ‘ExpressionAttributeValues’
+
+**Note one or two problems you overcame to get the cloud function talking to your database; include the error messages or screenshots of the issues, and write down what you did to fix them**
+1. “Error” : “body” when using the POST method in postman to update the viewer counter.
+![Alt text](<message Error updating value,.png>)
+Have to enter the required parameters in the 'body' section since this is a POST request
+2. Test event format was wrongly structured. This resulted in a failure when testing the lambda function. To resolve this, ensure that the event[‘body’] is received as a string and must be escaped (for HTTP API). This is because:
+    - When an HTTP request is made to API Gateway, the request body is always transmitted as a string, since HTTP can only transmit text.
+    - API Gateway then takes this string and places it into the body field of the Lambda event, maintaining its string format.
+    - If the original request body was JSON, it remains a JSON string inside the body field, which will result in an error. JSON  strings containing quotes must escape those quotes to prevent them from prematurely terminating the string.
+    - Without escaping, "body": "{"count": "10"}" would be invalid JSON because the quotes around count would break the JSON syntax
+Correct syntax: 
+![Alt text](<Pasted Graphic 3.png>)
