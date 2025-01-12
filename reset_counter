@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#Ensure AWS sso is correctly logged in
+
+echo Logged in as: $AWS_DEFAULT_PROFILE
+
+if [[ -z "{$AWS_DEFAULT_PROFILE}" ]]; then
+	echo "Not logged in! Running sso login command..."
+	aws sso login --profile glen91
+else
+	echo "You are already signed in as: ${AWS_DEFAULT_PROFILE}"
+fi
+
+#Reset count to 0
+aws dynamodb update-item \
+--table-name ViewerCounter \
+--key file://key.json \
+--update-expression "SET #C = :c" \
+--expression-attribute-names file://expression-attribute-names.json \
+--expression-attribute-values file://expression-attribute-values.json \
+--return-values ALL_NEW
