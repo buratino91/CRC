@@ -2,3 +2,9 @@ old/
 /index.html
 /styles.css
 lambda_function/
+node_modules
+cypress/
+cypress.config.js
+package-lock.json
+package.json
+.DS_Store

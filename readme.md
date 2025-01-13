@@ -39,3 +39,9 @@ Have to enter the required parameters in the 'body' section since this is a POST
     - Without escaping, "body": "{"count": "10"}" would be invalid JSON because the quotes around count would break the JSON syntax
 Correct syntax: 
 ![Alt text](<Pasted Graphic 3.png>)
+
+## Chunk 3 - Tying the frontend and backends together
+1. Javascript to make the HTTP requests to the API gateway
+2. Ensureing CORS is configured properly so that the APIs can be called from the domain
+2. Basic HTML modifications to display a counter
+3. End-to-end test using cypress
