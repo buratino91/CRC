@@ -8,3 +8,5 @@ cypress.config.js
 package-lock.json
 package.json
 .DS_Store
+ksk-private.pem
+ksk-public.pem
