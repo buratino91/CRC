@@ -10,3 +10,4 @@ package.json
 .DS_Store
 ksk-private.pem
 ksk-public.pem
+notes.md
