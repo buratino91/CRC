@@ -11,3 +11,9 @@ package.json
 ksk-private.pem
 ksk-public.pem
 notes.md
+CRC_terraform_frontend/
+aws-login.sh
+backend_terraform/
+crc_env/
+getViewerCount_function/
+login_console.sh
