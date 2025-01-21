@@ -16,4 +16,4 @@ aws-login.sh
 backend_terraform/
 crc_env/
 getViewerCount_function/
-login_console.sh
+
