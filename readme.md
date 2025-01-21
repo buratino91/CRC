@@ -15,3 +15,6 @@ My attempt at the cloud resume challenge
 2. Ensureing CORS is configured properly so that the APIs can be called from the domain
 2. Basic HTML modifications to display a counter
 3. End-to-end test using cypress
+
+## Architecture
+![Alt text](CRC_architecture(1).png)
